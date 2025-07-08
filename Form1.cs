@@ -2,32 +2,36 @@ using BankAccountApp;
 
 namespace BankAccountAppBasic
 {
-    public partial class Form1 : Form // partial class indicates that it is part of Form
+    public partial class SunCal : Form // partial class indicates that it is part of Form
     {
-        public Form1()
+        List<BankAccount> BankAccounts = new List<BankAccount>();
+
+        public SunCal()
         {
             InitializeComponent();
 
-            BankAccount bankAccount = new BankAccount(); // creates a bank account, uses Guid
-            bankAccount.Owner = "Rafael Castro";
-            bankAccount.AccountNumber = Guid.NewGuid();
-            bankAccount.Balance = 250;
-
-
-
-            List<BankAccount> bankAccounts = new List<BankAccount>();
-            bankAccounts.Add(bankAccount);
-
-            BankAccountsGrid.DataSource = bankAccounts; // datasource uses bankaccountsgrid (name of objects in interface) to display bankAccounts data list
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void AccountCreateButton_Click(object sender, EventArgs e)              // calls the particular name of button in form
         {
-            MessageBox.Show("Label clicked!");
+            if (string.IsNullOrEmpty(OwnerBox.Text))
+            {
+                MessageBox.Show("Please enter a valid name.");                          // if blank value is detected in textbox, message box prints error message and ensures
+                 
+                return;
+            }
+           
+
+            BankAccount bankAccount = new BankAccount(OwnerBox.Text);                  // uses name of object "OwnerBox" and adds new BankAccount object using text
+            BankAccounts.Add(bankAccount);                                             // Add method for bankAccount 
+
+            RefreshGrid();
         }
 
-
-
-
+        private void RefreshGrid()
+        { 
+            BankAccountsGrid.DataSource = null;
+            BankAccountsGrid.DataSource = BankAccounts;
+        }
     }
 }
