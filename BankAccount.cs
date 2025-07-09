@@ -1,16 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System;
 
 namespace BankAccountApp
 {
     public class BankAccount
     {
-        public string Owner { get; set; } // gets and sets the string (public encapsulation so it allows for obtaining data outside and inside of class) of the owner
-        public Guid AccountNumber { get; set; } // Guid generates random "key" for user
+        public string Owner { get; set; }
+        public Guid AccountNumber { get; set; }
         public decimal Balance { get; set; }
 
+        public BankAccount(string owner)
+        {
+            Owner = owner;
+            AccountNumber = Guid.NewGuid();
+            Balance = 0m;
+        }
+
+        public void Deposit(decimal amount)
+        {
+            if (amount > 0)
+            {
+                Balance += amount;
+            }
+        }
+
+        public void Withdraw(decimal amount)
+        {
+            if (amount > 0 && amount <= Balance)
+            {
+                Balance -= amount;
+            }
+        }
     }
 }
