@@ -42,27 +42,82 @@ namespace BankAccountAppBasic
         // Runs when the form finishes loading
         private async void SunCal_Load(object sender, EventArgs e)
         {
-            // Start with transparent weather text
+            // Start with transparent weather text for all cities
             WeatherTxt1.ForeColor = Color.FromArgb(0, 0, 0, 0);
+            WeatherTxt2.ForeColor = Color.FromArgb(0, 0, 0, 0);
+            WeatherTxt3.ForeColor = Color.FromArgb(0, 0, 0, 0);
+            WeatherTxt4.ForeColor = Color.FromArgb(0, 0, 0, 0);
+            WeatherTxt5.ForeColor = Color.FromArgb(0, 0, 0, 0);
+
             WeatherTxt1.Visible = true;
+            WeatherTxt2.Visible = true;
+            WeatherTxt3.Visible = true;
+            WeatherTxt4.Visible = true;
+            WeatherTxt5.Visible = true;
 
             // Setup timer to handle fade-in animation for weather text
             weatherFadeTimer = new Timer { Interval = 50 };
             weatherFadeTimer.Tick += WeatherFadeTimer_Tick;
             weatherFadeTimer.Start();
 
-            // Fetch and display weather for default location (Seattle)
-            var weather = await GetWeatherAsync("Seattle");
+            // Fetch and display weather for all locations
+            var seattleTask = GetWeatherAsync("Seattle");
+            var portlandTask = GetWeatherAsync("Portland");
+            var laTask = GetWeatherAsync("Los Angeles");
+            var nyTask = GetWeatherAsync("New York");
+            var houstonTask = GetWeatherAsync("Houston");
 
-            if (weather is WeatherData w)
+            await Task.WhenAll(seattleTask, portlandTask, laTask, nyTask, houstonTask);
+
+            // Update weather displays for each city
+            if (seattleTask.Result is WeatherData seattleWeather)
             {
-                // Convert Celsius to Fahrenheit for display
-                float tempF = (w.Temperature * 1.8f) + 32;
-                WeatherTxt1.Text = $"Weather: {w.Description}, Temp: {tempF:F1}°F";
+                float tempF = (seattleWeather.Temperature * 1.8f) + 32;
+                WeatherTxt1.Text = $"Seattle: {seattleWeather.Description}, {tempF:F1}°F";
             }
             else
             {
-                WeatherTxt1.Text = "Weather data unavailable";
+                WeatherTxt1.Text = "Seattle weather unavailable";
+            }
+
+            if (portlandTask.Result is WeatherData portlandWeather)
+            {
+                float tempF = (portlandWeather.Temperature * 1.8f) + 32;
+                WeatherTxt2.Text = $"Portland: {portlandWeather.Description}, {tempF:F1}°F";
+            }
+            else
+            {
+                WeatherTxt2.Text = "Portland weather unavailable";
+            }
+
+            if (laTask.Result is WeatherData laWeather)
+            {
+                float tempF = (laWeather.Temperature * 1.8f) + 32;
+                WeatherTxt3.Text = $"Los Angeles: {laWeather.Description}, {tempF:F1}°F";
+            }
+            else
+            {
+                WeatherTxt3.Text = "LA weather unavailable";
+            }
+
+            if (nyTask.Result is WeatherData nyWeather)
+            {
+                float tempF = (nyWeather.Temperature * 1.8f) + 32;
+                WeatherTxt4.Text = $"New York: {nyWeather.Description}, {tempF:F1}°F";
+            }
+            else
+            {
+                WeatherTxt4.Text = "NY weather unavailable";
+            }
+
+            if (houstonTask.Result is WeatherData houstonWeather)
+            {
+                float tempF = (houstonWeather.Temperature * 1.8f) + 32;
+                WeatherTxt5.Text = $"Houston: {houstonWeather.Description}, {tempF:F1}°F";
+            }
+            else
+            {
+                WeatherTxt5.Text = "Houston weather unavailable";
             }
         }
 
@@ -73,7 +128,11 @@ namespace BankAccountAppBasic
             {
                 fadeLevel += 0.05f;
                 int alpha = (int)(fadeLevel * 255);
-                WeatherTxt1.ForeColor = Color.FromArgb(alpha, 0, 0, 0); // gradually increases opacity
+                WeatherTxt1.ForeColor = Color.FromArgb(alpha, 0, 0, 0);
+                WeatherTxt2.ForeColor = Color.FromArgb(alpha, 0, 0, 0);
+                WeatherTxt3.ForeColor = Color.FromArgb(alpha, 0, 0, 0);
+                WeatherTxt4.ForeColor = Color.FromArgb(alpha, 0, 0, 0);
+                WeatherTxt5.ForeColor = Color.FromArgb(alpha, 0, 0, 0);
             }
             else
             {
@@ -202,6 +261,26 @@ namespace BankAccountAppBasic
             BankAccountsGrid.DataSource = null;  // Reset binding to refresh UI
             BankAccountsGrid.DataSource = BankAccounts;
         }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+        }
     }
 
     // Simple POCO class to hold weather info returned from API
@@ -211,4 +290,3 @@ namespace BankAccountAppBasic
         public float Temperature { get; set; }          // Temperature in Celsius
     }
 }
-
