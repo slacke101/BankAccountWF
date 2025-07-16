@@ -2,7 +2,8 @@
 
 Snapshot of UI
 Bank Account # uses Guid key for strengthened security
-![UI Screenshot](./suns1.png)
+<img width="1918" height="1007" alt="suns1" src="https://github.com/user-attachments/assets/09070d7c-b8ec-4c92-b7f8-79f994812e73" />
+
 
 
 ---
